@@ -10,8 +10,8 @@ class TimeSelectionScreen extends StatefulWidget {
 }
 
 class _TimeSelectionScreenState extends State<TimeSelectionScreen> {
-  int selectedHours = 4;
-  final List<int> hours = List.generate(13, (i) => i + 1); // 1-13시간
+  int selectedHours = 1;
+  final List<int> hours = List.generate(16, (i) => i + 1); // 1-13시간
 
   @override
   Widget build(BuildContext context) {

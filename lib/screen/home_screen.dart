@@ -1,3 +1,4 @@
+import 'package:burnout_todolist/providers/theme_provider.dart';
 import 'package:burnout_todolist/widgets/study_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,16 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('빗번'),
+        actions: [
+          Consumer<ThemeProvider> (
+            builder: (context, themeProvider, _) => IconButton(
+              icon: Icon(
+                themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode
+              ),
+              onPressed: () => themeProvider.toggleTheme(),
+            ),
+          )
+        ],
       ),
       body: Consumer<TodoProvider>(
         builder: (context, provider, child) {

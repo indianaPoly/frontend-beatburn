@@ -1,4 +1,5 @@
 import 'package:burnout_todolist/providers/todo_provider.dart';
+import 'package:burnout_todolist/widgets/indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,40 +7,30 @@ class StudyIndicator extends StatelessWidget {
  @override
  Widget build(BuildContext context) {
    return Consumer<TodoProvider>(
-     builder: (context, provider, child) {
+     builder: (context, provider, _) {
        final isStudying = provider.currentState == StudyState.studying;
-       return Container(
-           margin: const EdgeInsets.only(right: 16),
-           padding: const EdgeInsets.symmetric(vertical: 16),
-           decoration: BoxDecoration(
-             color: Color(0xFFFAFAFA),
-             borderRadius: BorderRadius.circular(16),
-             border: Border.all(
-               color: Color(0xFFEEEEEE),
-               width: 1,
+       return Indicator(
+         margin: const EdgeInsets.only(right: 16),
+         mainContent: Column(
+           children: [
+             Icon(
+               isStudying ? Icons.school : Icons.coffee, 
+               color: Indicator.textColors['accent'],
+               size: 30,
              ),
-           ),
-           child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Icon(
-                 isStudying ? Icons.school : Icons.coffee,
-                 color: Color(0xFF9E9E9E),
-                 size: 24,
+             const SizedBox(height: 8),
+             Text(
+               isStudying ? '공부중' : '휴식중',
+               style: TextStyle(
+                 color: Indicator.textColors['secondary'],
+                 fontWeight: FontWeight.w500,
+                 fontSize: 16,
                ),
-               const SizedBox(height: 8),
-               Text(
-                 isStudying ? '공부중' : '휴식중',
-                 style: TextStyle(
-                   color: Color(0xFF757575),
-                   fontWeight: FontWeight.w600,
-                   fontSize: 14,
-                 ),
-               ),
-             ],
-           ),
-         );
-     },
+             ),
+           ],
+         ),
+       );
+     }
    );
  }
 }

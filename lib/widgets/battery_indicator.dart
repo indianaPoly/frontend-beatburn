@@ -1,3 +1,4 @@
+import 'package:burnout_todolist/widgets/indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:burnout_todolist/providers/todo_provider.dart';
@@ -9,27 +10,17 @@ class BatteryIndicator extends StatelessWidget {
    final percentage = (provider.remainingTime / provider.maxTime) * 100;
    final hours = provider.remainingTime.floor();
    final minutes = ((provider.remainingTime - hours) * 60).round();
-   
-   return Container(
+
+   return Indicator(
      margin: const EdgeInsets.only(left: 16),
-     padding: const EdgeInsets.symmetric(vertical: 16),
-     decoration: BoxDecoration(
-       color: Colors.grey[50],
-       borderRadius: BorderRadius.circular(16),
-       border: Border.all(
-         color: Colors.grey[200]!,
-         width: 1,
-       ),
-     ),
-     child: Column(
-       mainAxisAlignment: MainAxisAlignment.center,
+     mainContent: Column(
        children: [
          Text(
-           '${percentage.toStringAsFixed(1)}%',
+           '${percentage.toStringAsFixed(0)}%',
            style: TextStyle(
              fontSize: 24,
              fontWeight: FontWeight.bold,
-             color: Colors.indigo[700],
+             color: Indicator.textColors['accent'],
            ),
          ),
          const SizedBox(height: 8),
@@ -37,7 +28,7 @@ class BatteryIndicator extends StatelessWidget {
            '남은 시간: ${hours}시간 ${minutes}분',
            style: TextStyle(
              fontSize: 16,
-             color: Colors.indigo[500],
+             color: Indicator.textColors['secondary'],
              fontWeight: FontWeight.w500,
            ),
          ),

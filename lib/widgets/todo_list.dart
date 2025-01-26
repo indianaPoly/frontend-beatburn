@@ -7,6 +7,7 @@ class TodoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<TodoProvider>();
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -18,11 +19,13 @@ class TodoList extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 8),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDarkMode ? Colors.grey[850] : Colors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: isDarkMode 
+                  ? Colors.black.withOpacity(0.3)
+                  : Colors.grey.withOpacity(0.1),
                 spreadRadius: 1,
                 blurRadius: 4,
               ),
@@ -38,9 +41,10 @@ class TodoList extends StatelessWidget {
                   children: [
                     Text(
                       todo.task,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
+                        color: isDarkMode ? Colors.white : Colors.black,
                       ),
                     ),
                     if (todo.startTime != null || todo.endTime != null || todo.actualTime != null)
@@ -50,11 +54,11 @@ class TodoList extends StatelessWidget {
                           spacing: 12,
                           children: [
                             if (todo.startTime != null)
-                              _buildTimeChip('시작 ${DateFormat('HH:mm').format(todo.startTime!)}'),
+                              _buildTimeChip('시작 ${DateFormat('HH:mm').format(todo.startTime!)}', isDarkMode),
                             if (todo.endTime != null)
-                              _buildTimeChip('종료 ${DateFormat('HH:mm').format(todo.endTime!)}'),
+                              _buildTimeChip('종료 ${DateFormat('HH:mm').format(todo.endTime!)}', isDarkMode),
                             if (todo.actualTime != null)
-                              _buildTimeChip('${(todo.actualTime! * 60).round()}분'),
+                              _buildTimeChip('${(todo.actualTime! * 60).round()}분', isDarkMode),
                           ],
                         ),
                       ),
@@ -66,7 +70,8 @@ class TodoList extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.grey),
+                      icon: Icon(Icons.delete, 
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey),
                       onPressed: () => provider.removeTodo(todo.id),
                     ),
                     SizedBox(
@@ -84,17 +89,15 @@ class TodoList extends StatelessWidget {
                                   }
                                 : null,
                         style: TextButton.styleFrom(
-                          backgroundColor: provider.activeTaskId == todo.id
-                              ? Colors.red[50]
-                              : Colors.green[50],
+                          backgroundColor: provider.activeTaskId == todo.id ? Colors.red[100]: Colors.green[100],
                           padding: const EdgeInsets.symmetric(vertical: 8),
                         ),
                         child: Text(
                           provider.activeTaskId == todo.id ? '종료' : '시작',
                           style: TextStyle(
                             color: provider.activeTaskId == todo.id
-                                ? Colors.red[700]
-                                : Colors.green[700],
+                                ? Colors.red[800]
+                                : Colors.green[800],
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -109,18 +112,18 @@ class TodoList extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeChip(String label) {
+  Widget _buildTimeChip(String label, bool isDarkMode) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: isDarkMode ? Colors.grey[800] : Colors.grey[100],
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         label,
         style: TextStyle(
           fontSize: 13,
-          color: Colors.grey[800],
+          color: isDarkMode ? Colors.grey[300] : Colors.grey[800],
         ),
       ),
     );

@@ -23,9 +23,9 @@ class HomeScreen extends StatelessWidget {
             Icon(Icons.bolt, color: Color(0xFF8B5CF6)), // 앱 아이콘 추가
             SizedBox(width: 8),
             Text(
-              '빗번',
+              'BeatBurn',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF8B5CF6), // 타이틀 색상을 포인트 색상으로
               ),

@@ -10,75 +10,88 @@ class TimeSelectionScreen extends StatefulWidget {
 }
 
 class _TimeSelectionScreenState extends State<TimeSelectionScreen> {
-  int selectedHours = 1;
-  final List<int> hours = List.generate(16, (i) => i + 1); // 1-13시간
+ int selectedHours = 1;
+ final List<int> hours = List.generate(16, (i) => i + 1);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '오늘의 집중 시간',
-                style: Theme.of(context).textTheme.headlineMedium,
-                textAlign: TextAlign.center,
+ @override
+ Widget build(BuildContext context) {
+   final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+   
+   return Scaffold(
+     body: SafeArea(
+       child: Padding(
+         padding: const EdgeInsets.all(20.0),
+         child: Column(
+           mainAxisAlignment: MainAxisAlignment.center,
+           children: [
+            Text(
+              '오늘의 집중 시간',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF8B5CF6),
+                letterSpacing: 1.2,
               ),
-              SizedBox(height: 50),
-              SizedBox(
-                height: 200,
-                child: ListWheelScrollView(
-                  itemExtent: 50,
-                  diameterRatio: 1.5,
-                  physics: FixedExtentScrollPhysics(),
-                  children: hours.map((hour) => 
-                    Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '$hour시간',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: hour == selectedHours ? 
-                            FontWeight.bold : FontWeight.normal,
-                        ),
-                      ),
-                    )
-                  ).toList(),
-                  onSelectedItemChanged: (index) {
-                    setState(() {
-                      selectedHours = hours[index];
-                    });
-                  },
-                ),
-              ),
-              SizedBox(height: 50),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    elevation: 4,
-                    shadowColor: Colors.black54,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  onPressed: () {
-                    context.read<TodoProvider>().setMaxTime(selectedHours.toDouble());
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => HomeScreen())
-                    );
-                  },
-                  child: const Text('진행하기', style: TextStyle(fontSize: 16)),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+              textAlign: TextAlign.center,
+            ),
+             SizedBox(height: 50),
+             SizedBox(
+               height: 200,
+               child: ListWheelScrollView(
+                 itemExtent: 50,
+                 diameterRatio: 1.5,
+                 physics: FixedExtentScrollPhysics(),
+                 children: hours.map((hour) =>
+                   Container(
+                     alignment: Alignment.center,
+                     child: Text(
+                       '$hour시간',
+                       style: TextStyle(
+                         fontSize: 24,
+                         fontWeight: hour == selectedHours ? 
+                           FontWeight.bold : FontWeight.normal,
+                         color: hour == selectedHours ? 
+                           Color(0xFF8B5CF6) : 
+                           (isDarkMode ? Colors.white : Colors.black),
+                       ),
+                     ),
+                   )
+                 ).toList(),
+                 onSelectedItemChanged: (index) {
+                   setState(() {
+                     selectedHours = hours[index];
+                   });
+                 },
+               ),
+             ),
+             SizedBox(height: 50),
+             SizedBox(
+               width: double.infinity,
+               child: ElevatedButton(
+                 style: ElevatedButton.styleFrom(
+                   padding: EdgeInsets.symmetric(vertical: 16),
+                   elevation: 4,
+                   shadowColor: Colors.black54,
+                   shape: RoundedRectangleBorder(
+                     borderRadius: BorderRadius.circular(8),
+                   ),
+                 ),
+                 onPressed: () {
+                   context.read<TodoProvider>().setMaxTime(selectedHours.toDouble());
+                   Navigator.of(context).pushReplacement(
+                     MaterialPageRoute(builder: (_) => HomeScreen())
+                   );
+                 },
+                 child: const Text('진행하기', style: TextStyle(
+                    color: Color(0xFF8B5CF6),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600)),
+               ),
+             ),
+           ],
+         ),
+       ),
+     ),
+   );
+ }
 }

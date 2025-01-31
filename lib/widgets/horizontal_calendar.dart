@@ -87,7 +87,7 @@ class HorizontalCalendarState extends State<HorizontalCalendar> {
         }
 
         return Container(
-          height: 100,
+          height: 90,
           child: ListView.builder(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,

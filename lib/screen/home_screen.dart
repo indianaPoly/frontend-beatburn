@@ -10,7 +10,6 @@ import 'package:burnout_todolist/widgets/todo_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -31,8 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.bolt, color: Color(0xFF8B5CF6)),
-              SizedBox(width: 8),
               Text(
                 'BeatBurn',
                 style: TextStyle(
@@ -45,6 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
+          // 시간 설정 버튼 추가
+          IconButton(
+            icon: Icon(
+              Icons.timer,
+              color: Color(0xFF8B5CF6),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/time-selection');
+            },
+          ),
+          // 테마 토글 버튼
           Consumer<ThemeProvider>(
             builder: (context, themeProvider, _) => IconButton(
               icon: Icon(

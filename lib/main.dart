@@ -1,3 +1,4 @@
+import 'package:burnout_todolist/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:burnout_todolist/providers/theme_provider.dart';
@@ -83,7 +84,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         useMaterial3: true,
         brightness: themeProvider.isDarkMode ? Brightness.dark : Brightness.light,
       ),
-      home: TimeSelectionScreen(),
+      initialRoute: '/', // home 대신 initialRoute 사용
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/time-selection': (context) => TimeSelectionScreen(),
+      },
     );
   }
 }

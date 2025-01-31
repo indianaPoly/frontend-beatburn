@@ -73,11 +73,6 @@ class _TimeSelectionScreenState extends State<TimeSelectionScreen> {
                                     title: Text('방해금지 모드 사용을 추천해요.',
                                       style: TextStyle(fontSize: 14)),
                                   ),
-                                  ListTile(
-                                    leading: Icon(Icons.check, color: Color(0xFF8B5CF6)),
-                                    title: Text('백그라운드 종료시 초기화돼요.',
-                                      style: TextStyle(fontSize: 14)),
-                                  ),
                                 ],
                               ),
                               actions: [
@@ -140,10 +135,10 @@ class _TimeSelectionScreenState extends State<TimeSelectionScreen> {
                     ),
                   ),
                   onPressed: () {
+                    // 시간 설정
                     context.read<TodoProvider>().setMaxTime(selectedHours.toDouble());
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => HomeScreen())
-                    );
+                    // 단순히 현재 화면을 스택에서 제거
+                    Navigator.of(context).pop();
                   },
                   child: const Text('진행', 
                     style: TextStyle(

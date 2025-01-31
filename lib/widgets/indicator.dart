@@ -23,7 +23,7 @@ class Indicator extends StatelessWidget {
       margin: margin,
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: isDarkMode ? Colors.grey[900] : Colors.grey[50],
+        color: isDarkMode ? Colors.grey[900] : const Color.fromRGBO(250, 250, 250, 1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isDarkMode ? Colors.grey[800]! : Colors.grey[200]!,

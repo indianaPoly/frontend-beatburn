@@ -1,15 +1,22 @@
 import 'package:burnout_todolist/providers/theme_provider.dart';
+import 'package:burnout_todolist/widgets/horizontal_calendar.dart';
 import 'package:burnout_todolist/widgets/study_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:burnout_todolist/providers/todo_provider.dart';
 import 'package:burnout_todolist/widgets/add_todo_form.dart';
 import 'package:burnout_todolist/widgets/battery_indicator.dart';
 import 'package:burnout_todolist/widgets/todo_list.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<HorizontalCalendarState> _calendarKey = GlobalKey<HorizontalCalendarState>();
 
   @override
   Widget build(BuildContext context) {
@@ -17,27 +24,32 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.bolt, color: Color(0xFF8B5CF6)), // 앱 아이콘 추가
-            SizedBox(width: 8),
-            Text(
-              'BeatBurn',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF8B5CF6), // 타이틀 색상을 포인트 색상으로
+        title: GestureDetector(
+          onTap: () {
+            _calendarKey.currentState?.scrollToToday();
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.bolt, color: Color(0xFF8B5CF6)),
+              SizedBox(width: 8),
+              Text(
+                'BeatBurn',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF8B5CF6),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [
           Consumer<ThemeProvider>(
             builder: (context, themeProvider, _) => IconButton(
               icon: Icon(
                 themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                color: Color(0xFF8B5CF6), // 테마 토글 버튼도 같은 색상으로
+                color: Color(0xFF8B5CF6),
               ),
               onPressed: () => themeProvider.toggleTheme(),
             ),
@@ -53,10 +65,10 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded( // 전체 Row를 Expanded로 감싸기
+                    Expanded(
                       child: Container(
                         height: 100,
-                        child: Row( // 내부 Row에도 Expanded 적용
+                        child: Row(
                           children: [
                             Expanded(child: StudyIndicator()),
                             Expanded(child: BatteryIndicator()),
@@ -67,6 +79,7 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
+                HorizontalCalendar(key: _calendarKey),
                 const SizedBox(height: 16),
                 AddTodoForm(),
                 const SizedBox(height: 16),

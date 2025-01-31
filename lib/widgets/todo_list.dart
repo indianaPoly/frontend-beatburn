@@ -9,11 +9,39 @@ class TodoList extends StatelessWidget {
     final provider = context.watch<TodoProvider>();
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
+    final todosForSelectedDate = provider.todosForSelectedDate;
+    
+    if (todosForSelectedDate.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.assignment_outlined,
+              size: 48,
+              color: isDarkMode ? Colors.grey[600] : Colors.grey[400],
+            ),
+            SizedBox(height: 16),
+            Text(
+              provider.selectedDate == null 
+                ? '날짜를 선택해주세요'
+                : '${DateFormat('MM월 dd일').format(provider.selectedDate!)}의 할 일이 없습니다',
+              style: TextStyle(
+                fontSize: 16,
+                color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: provider.todos.length,
+      itemCount: todosForSelectedDate.length,
       itemBuilder: (context, index) {
-        final todo = provider.todos[index];
+        final todo = todosForSelectedDate[index];
+        final isActive = provider.activeTaskId == todo.id;
         
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
@@ -77,27 +105,23 @@ class TodoList extends StatelessWidget {
                     SizedBox(
                       width: 80,
                       child: TextButton(
-                        onPressed: provider.activeTaskId == null
-                            ? () => {
-                                provider.startTask(todo.id),
-                                provider.setStudyState(StudyState.studying)
+                        onPressed: provider.activeTaskId == null || isActive
+                            ? () {
+                                if (isActive) {
+                                  provider.endTask(todo.id);
+                                } else {
+                                  provider.startTask(todo.id);
+                                }
                               }
-                            : provider.activeTaskId == todo.id
-                                ? () => {
-                                    provider.endTask(todo.id),
-                                    provider.setStudyState(StudyState.resting)
-                                  }
-                                : null,
+                            : null,
                         style: TextButton.styleFrom(
-                          backgroundColor: provider.activeTaskId == todo.id ? Colors.red[100]: Colors.green[100],
+                          backgroundColor: isActive ? Colors.red[100] : Colors.green[100],
                           padding: const EdgeInsets.symmetric(vertical: 8),
                         ),
                         child: Text(
-                          provider.activeTaskId == todo.id ? '종료' : '시작',
+                          isActive ? '종료' : '시작',
                           style: TextStyle(
-                            color: provider.activeTaskId == todo.id
-                                ? Colors.red[800]
-                                : Colors.green[800],
+                            color: isActive ? Colors.red[800] : Colors.green[800],
                             fontWeight: FontWeight.w500,
                           ),
                         ),

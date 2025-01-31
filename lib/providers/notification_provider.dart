@@ -90,7 +90,6 @@ class NotificationProvider with ChangeNotifier {
       priority: Priority.high,
       showWhen: true,
       enableVibration: true,
-      styleInformation: BigTextStyleInformation(''),
       fullScreenIntent: true,  // 화면이 꺼져있을 때도 알림 표시
     );
 

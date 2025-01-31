@@ -1,12 +1,16 @@
-import 'package:burnout_todolist/models/todo.dart';
+import 'package:burnout_todolist/providers/notification_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'package:burnout_todolist/models/todo.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 enum StudyState {
   studying,
   resting
 }
 
-class TodoProvider with ChangeNotifier {
+class TodoProvider with ChangeNotifier {  
   List<Todo> _todos = [];
   double _maxTime = 4.0;
   String? _activeTaskId;

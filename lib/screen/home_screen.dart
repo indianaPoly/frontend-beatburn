@@ -23,6 +23,86 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.delete_outline,
+            color: Color(0xFF8B5CF6),
+          ),
+          onPressed: () {
+            // 확인 다이얼로그 표시
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(
+                  '데이터 삭제',
+                  style: TextStyle(
+                    color: Color(0xFF8B5CF6),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10),
+                    ListTile(
+                      leading: Icon(Icons.warning_amber_rounded, color: Color(0xFF8B5CF6)),
+                      title: Text(
+                        '모든 할 일 데이터가 삭제돼요.\n계속하시겠어요?',
+                        style: TextStyle(fontSize: 14)
+                      ),
+                    ),
+                  ],
+                ),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          '취소',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Provider.of<TodoProvider>(context, listen: false).clearAllTodos();
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '모든 할 일이 삭제되었습니다.',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                              backgroundColor: Color(0xFF8B5CF6),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '삭제',
+                          style: TextStyle(
+                            color: Color(0xFF8B5CF6),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
         title: GestureDetector(
           onTap: () {
             _calendarKey.currentState?.scrollToToday();

@@ -132,4 +132,13 @@ class TodoProvider with ChangeNotifier {
     _currentState = state;
     notifyListeners();
   }
+
+  Future<void> clearAllTodos() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(TODOS_KEY); // SharedPreferences에서 데이터 삭제
+    _todos.clear(); // 메모리상의 todos 리스트 비우기
+    _activeTaskId = null; // 활성 태스크 초기화
+    _currentState = StudyState.resting; // 상태 초기화
+    notifyListeners();
+  }
 }

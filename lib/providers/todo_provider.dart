@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:burnout_todolist/models/todo.dart';
+import '../models/todo.dart';
 
 enum StudyState {
   studying,
@@ -10,38 +10,65 @@ enum StudyState {
 
 class TodoProvider with ChangeNotifier {
   static const String TODOS_KEY = 'todos';
+  static const String MAX_TIMES_KEY = 'max_times';
   
   List<Todo> _todos = [];
-  double _maxTime = 4.0;
+  Map<String, double> _maxTimes = {};
   String? _activeTaskId;
   StudyState _currentState = StudyState.resting;
   DateTime? _selectedDate;
 
   TodoProvider() {
     _loadTodos();
+    _loadMaxTimes();
   }
 
   List<Todo> get todos => _todos;
-  double get maxTime => _maxTime;
   String? get activeTaskId => _activeTaskId;
   StudyState get currentState => _currentState;
   DateTime? get selectedDate => _selectedDate;
+
+  double get maxTime {
+    if (_selectedDate == null) return 4.0;
+    String dateKey = _getDateKey(_selectedDate!);
+    return _maxTimes[dateKey] ?? 4.0;
+  }
+
+  String _getDateKey(DateTime date) {
+    return '${date.year}-${date.month}-${date.day}';
+  }
 
   List<Todo> get todosForSelectedDate {
     if (_selectedDate == null) return [];
     return _todos.where((todo) {
       return todo.date?.year == _selectedDate?.year &&
-             todo.date?.month == _selectedDate?.month &&
-             todo.date?.day == _selectedDate?.day;
+          todo.date?.month == _selectedDate?.month &&
+          todo.date?.day == _selectedDate?.day;
     }).toList();
   }
 
   double get remainingTime {
     double usedTime = todosForSelectedDate.fold(
-      0, 
+      0,
       (sum, todo) => sum + (todo.actualTime ?? 0)
     );
-    return _maxTime - usedTime;
+    return maxTime - usedTime;
+  }
+
+  Future<void> _saveMaxTimes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String maxTimesJson = jsonEncode(_maxTimes);
+    await prefs.setString(MAX_TIMES_KEY, maxTimesJson);
+  }
+
+  Future<void> _loadMaxTimes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? maxTimesJson = prefs.getString(MAX_TIMES_KEY);
+    if (maxTimesJson != null) {
+      final Map<String, dynamic> decodedJson = jsonDecode(maxTimesJson);
+      _maxTimes = decodedJson.map((key, value) => MapEntry(key, value.toDouble()));
+      notifyListeners();
+    }
   }
 
   Future<void> _saveTodos() async {
@@ -61,7 +88,10 @@ class TodoProvider with ChangeNotifier {
   }
 
   void setMaxTime(double time) {
-    _maxTime = time;
+    if (_selectedDate == null) return;
+    String dateKey = _getDateKey(_selectedDate!);
+    _maxTimes[dateKey] = time;
+    _saveMaxTimes();
     notifyListeners();
   }
 
@@ -73,8 +103,8 @@ class TodoProvider with ChangeNotifier {
   int getTodoCountForDate(DateTime date) {
     return _todos.where((todo) {
       return todo.date?.year == date.year &&
-             todo.date?.month == date.month &&
-             todo.date?.day == date.day;
+          todo.date?.month == date.month &&
+          todo.date?.day == date.day;
     }).length;
   }
 
@@ -135,10 +165,12 @@ class TodoProvider with ChangeNotifier {
 
   Future<void> clearAllTodos() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(TODOS_KEY); // SharedPreferences에서 데이터 삭제
-    _todos.clear(); // 메모리상의 todos 리스트 비우기
-    _activeTaskId = null; // 활성 태스크 초기화
-    _currentState = StudyState.resting; // 상태 초기화
+    await prefs.remove(TODOS_KEY);
+    await prefs.remove(MAX_TIMES_KEY);
+    _todos.clear();
+    _maxTimes.clear();
+    _activeTaskId = null;
+    _currentState = StudyState.resting;
     notifyListeners();
   }
 }

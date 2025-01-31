@@ -1,11 +1,11 @@
 class Todo {
-  String id;
-  String task;
-  DateTime? date;
+  final String id;
+  final String task;
+  final DateTime? date;
   DateTime? startTime;
   DateTime? endTime;
-  bool isCompleted;
   double? actualTime;
+  bool isCompleted;
 
   Todo({
     required this.id,
@@ -13,11 +13,10 @@ class Todo {
     this.date,
     this.startTime,
     this.endTime,
-    this.isCompleted = false,
     this.actualTime,
+    this.isCompleted = false,
   });
 
-  // Todo 객체를 JSON으로 변환
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -25,12 +24,11 @@ class Todo {
       'date': date?.toIso8601String(),
       'startTime': startTime?.toIso8601String(),
       'endTime': endTime?.toIso8601String(),
-      'isCompleted': isCompleted,
       'actualTime': actualTime,
+      'isCompleted': isCompleted,
     };
   }
 
-  // JSON에서 Todo 객체로 변환
   factory Todo.fromJson(Map<String, dynamic> json) {
     return Todo(
       id: json['id'],
@@ -38,8 +36,8 @@ class Todo {
       date: json['date'] != null ? DateTime.parse(json['date']) : null,
       startTime: json['startTime'] != null ? DateTime.parse(json['startTime']) : null,
       endTime: json['endTime'] != null ? DateTime.parse(json['endTime']) : null,
-      isCompleted: json['isCompleted'] ?? false,
       actualTime: json['actualTime'],
+      isCompleted: json['isCompleted'] ?? false,
     );
   }
 }

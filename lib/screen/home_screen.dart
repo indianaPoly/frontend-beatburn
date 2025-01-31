@@ -1,4 +1,5 @@
 import 'package:burnout_todolist/providers/theme_provider.dart';
+import 'package:burnout_todolist/screen/time_selection_screen.dart';
 import 'package:burnout_todolist/widgets/horizontal_calendar.dart';
 import 'package:burnout_todolist/widgets/study_indicator.dart';
 import 'package:flutter/material.dart';
@@ -129,7 +130,10 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Color(0xFF8B5CF6),
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/time-selection');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TimeSelectionScreen()),
+              );
             },
           ),
           // 테마 토글 버튼

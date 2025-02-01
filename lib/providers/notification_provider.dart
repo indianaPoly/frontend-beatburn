@@ -18,7 +18,7 @@ class NotificationProvider with ChangeNotifier {
     
     // 초기화 설정
     const AndroidInitializationSettings androidSettings = 
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('ic_stat_notification');
         
     const DarwinInitializationSettings darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: true,

@@ -55,17 +55,30 @@ class NotificationProvider with ChangeNotifier {
   }
 
   Future<void> _setupAndroidChannel() async {
+    // 기존 채널 설정 코드
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'todo_channel',
-      '할 일 알림',
-      description: '진행 중인 할 일에 대한 알림',
-      importance: Importance.max,
-      playSound: true,
-      enableVibration: true,
-      showBadge: true,
-      sound: RawResourceAndroidNotificationSound('notification_sound'),  // res/raw 폴더에 사운드 파일 필요
-    );
-
+        'todo_channel',
+        '할 일 알림',
+        description: '진행 중인 할 일에 대한 알림',
+        importance: Importance.max,
+        playSound: true,
+        enableVibration: true,
+        showBadge: true,
+        sound: RawResourceAndroidNotificationSound('notification_sound'),  // res/raw 폴더에 사운드 파일 필요
+      );
+    
+    // Android 13 이상에서 권한 요청
+    if (Platform.isAndroid) {
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+          local.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      
+      if (androidImplementation != null) {
+        // Android 13 이상인 경우에만 권한 요청
+        final bool? granted = await androidImplementation.requestNotificationsPermission();
+        debugPrint('Android 알림 권한 상태: $granted');
+      }
+    }
+    
     await local.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }

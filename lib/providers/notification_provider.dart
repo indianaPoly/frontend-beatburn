@@ -104,6 +104,8 @@ class NotificationProvider with ChangeNotifier {
       showWhen: true,
       enableVibration: true,
       fullScreenIntent: true,  // 화면이 꺼져있을 때도 알림 표시
+      icon: '@android:drawable/ic_dialog_info',
+      largeIcon: const DrawableResourceAndroidBitmap('ic_stat_notification')
     );
 
     const DarwinNotificationDetails iOSDetails = DarwinNotificationDetails(

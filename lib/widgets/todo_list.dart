@@ -10,29 +10,40 @@ class TodoList extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
     final todosForSelectedDate = provider.todosForSelectedDate;
-    
+
     if (todosForSelectedDate.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.assignment_outlined,
-              size: 48,
-              color: isDarkMode ? Colors.grey[600] : Colors.grey[400],
-            ),
-            SizedBox(height: 16),
-            Text(
-              provider.selectedDate == null 
-                ? '날짜를 선택해주세요'
-                : '${DateFormat('MM월 dd일').format(provider.selectedDate!)}의 할 일이 없습니다',
-              style: TextStyle(
-                fontSize: 16,
-                color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.assignment_outlined,
+                      size: 48,
+                      color: isDarkMode ? Colors.grey[600] : Colors.grey[400],
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      provider.selectedDate == null
+                        ? '날짜를 선택해주세요'
+                        : '${DateFormat('MM월 dd일').format(provider.selectedDate!)}의 할 일이 없습니다',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
+          );
+        },
       );
     }
 
